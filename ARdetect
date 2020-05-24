@@ -1,0 +1,224 @@
+package com.company;
+
+import java.util.ArrayList;
+
+
+import cv2;
+import cv2.aruco as aruco;
+import sys;
+
+arucoMarkerLength = 0.05;
+
+public class AR {
+    /**
+     * ビデオポート?
+     */
+    private String videoPort;
+
+    /**
+     * カメラ行列
+     */
+    private ArrayList<float> cameraMatrix = new ArrayList<float>();
+
+    /**
+     * ひずみ係数
+     */
+    private ArrayList<float> distortionCoefficients = new distortionCoefficients<float>();
+
+    /**
+     * コンストラクタ
+     * @param videoPort, cameraMatrix, distortionCoefficients
+     */
+    public AR(String videoPort, float cameraMatrix, float distortionCoefficients){
+        this.cap = cv2.VideoCapture(videoPort);
+        this.cameraMatrix = cameraMatrix;
+        this.distortionCoefficients = distortionCoefficients;
+        this.dictionary = aruco.getPredefinedDictionary(aruco.DICT_5X5_250);
+    }
+
+    /**
+     * python
+        def __init__(self, videoPort, cameraMatrix, distortionCoefficients):
+        self.cap = cv2.VideoCapture(videoPort)
+        self.cameraMatrix = np.load(cameraMatrix)
+        self.distortionCoefficients = np.load(distortionCoefficients)
+        self.dictionary = aruco.getPredefinedDictionary(aruco.DICT_4X4_50)
+     */
+
+    public void findARMarker(){
+    this.ret, this.frame = this.cap.read();
+    if (this.frame.shape.size == 3) {
+        this.Height, this.Width, this.channels = this.frame.shape[:3];
+    }
+    else {
+        this.Height, this.Width = this.frame.shape[:2];
+        this.channels = 1;
+        this.halfHeight = int(this.Height / 2);
+        this.halfWidth = int(this.Width / 2);
+        this.corners, this.ids, this.rejectedImgPoints = aruco.detectMarkers(this.frame, this.dictionary);
+    }
+    aruco.drawDetectedMarkers(this.frame, this.corners, this.ids, (0,255,0));
+    }
+
+    /**
+     * python
+        def findARMarker(self):
+        self.ret, self.frame = self.cap.read()
+        if len(self.frame.shape) == 3:
+        self.Height, self.Width, self.channels = self.frame.shape[:3]
+        else:
+        self.Height, self.Width = self.frame.shape[:2]
+        self.channels = 1
+        self.halfHeight = int(self.Height / 2)
+        self.halfWidth = int(self.Width / 2)
+        self.corners, self.ids, self.rejectedImgPoints = aruco.detectMarkers(self.frame, self.dictionary)
+        #corners[id0,1,2...][][corner0,1,2,3][x,y]
+        aruco.drawDetectedMarkers(self.frame, self.corners, self.ids, (0,255,0))
+     */
+
+    public void show() {
+        cv2.imshow("result", this.frame);
+    }
+
+    /**
+     * python
+        def show(self):
+        cv2.imshow("result", self.frame)
+     */
+
+    public void getARPointAverage(){
+        num = this.getExistMarker();
+        if (num < 1) {
+            return;
+        }
+        else {
+            square_points = square_points.reshape((4*num, -1));
+            float sum_sq = 0;
+            int count = 0;
+            for (int row = 0; row < square_points.length; row++)
+                for (int col = 0; col < square_points[0].length; col++)
+                {
+                    sum_sq += arr[row][col];
+                    count++;
+                }
+            G = sum_sq / count;
+            cv2.circle(this.frame, (int(G[0]), int(G[1])), 10, (255, 255, 255), 5);
+            x = this.halfHeight - G[0];
+            y = G[1] - this.halfWidth;
+            return x, y;
+        }
+    }
+
+    /**
+     * python
+        def getARPointAverage(self):
+        num = self.getExistMarker()
+        if num < 1:
+        return
+        else:
+        square_points = square_points.reshape((4*num, -1))
+        G = np.mean(square_points, axis = 0)
+        cv2.circle(self.frame, (int(G[0]), int(G[1])), 10, (255, 255, 255), 5)
+        x = self.halfHeight - G[0]
+        y = G[1] - self.halfWidth
+        return x, y
+     */
+
+    getDistanceAverage() {
+        if (this.corners.size()){
+            this.rvec, this.tvec, _ = aruco.estimatePoseSingleMarkers(this.corners, arucoMarkerLength, this.cameraMatrix, this.distortionCoefficients);
+            float sum_tv = 0;
+            int count = 0;
+            for (int row = 0; row < this.tvec.length; row++)
+                for (int col = 0; col < this.tvec[0].length; col++)
+                {
+                    sum_tv += arr[row][col];
+                    count++;
+                }
+            G = sum_tv / count;
+            return G[0];
+        }
+    }
+    /**
+     * python
+        def getDistanceAverage(self):
+        if len(self.corners) > 0:
+        self.rvec, self.tvec, _ = aruco.estimatePoseSingleMarkers(self.corners, arucoMarkerLength, self.cameraMatrix, self.distortionCoefficients)
+        G = np.mean(self.tvec, axis = 0)
+        return G[0][1]
+
+        #ARそれぞれの距離が欲しかったらこっち
+        #return self.tvec[0][0][2], self.tvec[1][0][2]
+     */
+
+    getDegree() {
+        if (this.corners.size() > 0) {
+            this.rvec, this.tvec, _ = aruco.estimatePoseSingleMarkers(this.corners[0], arucoMarkerLength, this.cameraMatrix, this.distortionCoefficients);
+            this.frame = aruco.drawAxis(this.frame, this.cameraMatrix, this.distortionCoefficients, this.rvec, this.tvec, 0.1);
+            (roll_angle, pitch_angle, yaw_angle) = this.rvec[0][0][0] * 180 / pi, this.rvec[0][0][1] * 180 / pi, this.rvec[0][0][2] * 180 / pi;
+        }
+        if (this.corners.size() < 0) {
+            roll_angle, pitch_angle, yaw_angle = -roll_angle, -pitch_angle, -yaw_angle;
+        }
+        return roll_angle,pitch_angle, yaw_angle;
+    }
+    /**
+     * python
+        def getDegrees(self):
+        if len(self.corners) > 0:
+        self.rvec, self.tvec, _ = aruco.estimatePoseSingleMarkers(self.corners[0], arucoMarkerLength, self.cameraMatrix, self.distortionCoefficients)
+        self.frame = aruco.drawAxis(self.frame, self.cameraMatrix, self.distortionCoefficients, self.rvec, self.tvec, 0.1)
+        (roll_angle, pitch_angle, yaw_angle) =  self.rvec[0][0][0]*180/pi, self.rvec[0][0][1]*180/pi, self.rvec[0][0][2]*180/pi
+        if pitch_angle < 0:
+        roll_angle, pitch_angle, yaw_angle = -roll_angle, -pitch_angle, -yaw_angle
+        return (roll_angle, pitch_angle, yaw_angle)
+     */
+
+    getExistMarker(){
+        return this.corners.size();
+    }
+    /**
+     * python
+        def getExistMarker(self):
+        return len(self.corners)
+     */
+
+    release(){
+        this.cap.release();
+    }
+    /**
+     * python
+        def release(self):
+
+
+        if __name__ == '__main__':
+     */
+
+
+}
+
+public AR(0, 'mtx.npy', 'dist.npy'){
+    while(True){
+        myCap.findARMarker();
+        System.out.println(myCap.getDegrees());
+        myCap.show();
+        if (cv2.waitKey(1) > 0) {
+            myCap.release();
+            cv2.destroyAllWindows();
+            break;
+        }
+    }
+    /**
+     * python
+        myCap = AR(0, 'mtx.npy', 'dist.npy')
+        while True:
+        myCap.findARMarker()
+        print(myCap.getDegrees())
+        myCap.show()
+        if cv2.waitKey(1) > 0:
+        myCap.release()
+        cv2.destroyAllWindows()
+        break
+     */
+}
+
