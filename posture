@@ -1,0 +1,33 @@
+import java.awt.*;
+import javax.vecmath.*;
+
+public class Mat2Quat
+{
+    public static void main(String[] args)
+    {   int     i;
+        Quat4f      quat= new Quat4f();
+
+        Matrix4f[]  mat4 = new Matrix4f[5];
+        mat4[0]= new Matrix4f       //回転無し
+            ( 1.0f, 0.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, 0.0f, 
+              0.0f, 0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f );
+        mat4[1]= new Matrix4f       //Ｙ軸＋回転
+            ( 0.83f, 0.0f, -0.56f, 0.0f,  0.0f, 1.0f, 0.0f, 0.0f, 
+              0.56f, 0.0f, 0.83f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f );
+        mat4[2]= new Matrix4f       //Ｘ軸＋回転
+            ( 1.0f, 0.0f, 0.0f, 0.0f,  0.0f, 0.76f, 0.64f, 0.0f, 
+              0.0f, -0.64f, 0.76f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f );
+        mat4[3]= new Matrix4f       //Ｚ軸＋回転
+            ( 0.70f, 0.72f, 0.0f, 0.0f,  -0.72f, 0.70f, 0.0f, 0.0f, 
+              0.0f, 0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f );
+        mat4[4]= new Matrix4f       //ＸＹ軸－回転
+            ( 0.92f, 0.12f, 0.37f, 0.0f,  0.0f, 0.96f, -0.30f, 0.0f, 
+              -0.39f, 0.27f, 0.88f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f );
+
+        System.out.println("変換行列⇒クオータニオン");
+        for(i=0; i<5; i++)
+        {   mat4[i].get(quat);
+            System.out.println("x=" + quat.x + "  y=" + quat.y + "  z=" + quat.z + "  w=" + quat.w);
+        }
+    }
+}
