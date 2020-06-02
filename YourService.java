@@ -22,8 +22,8 @@ import jp.jaxa.iss.kibo.rpc.api.KiboRpcService;
 import static java.lang.Math.PI;
 import static java.lang.Math.cos;
 
-import java.util.ArrayList;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.List;
 
 
 /**
@@ -33,16 +33,16 @@ import java.util.List;
 
 public class YourService extends KiboRpcService {
 
-    //double Value;
+    double Value;
 
     @Override
     protected void runPlan1(){
 
         api.judgeSendStart();
 
-        moveToWrapper(11.35, -4.3, 4.55, 0, 0, -0.7071068, 0.7071068); //avoidKOZ1
+        //moveToWrapper(11.5, -4.3, 4.5, 0, 0, -0.7071068, 0.7071068); //avoidKOZ1
 
-        moveToWrapper(11.45, -5.7, 4.5, 0, 0, 0, 1); //p1-1
+        moveToWrapper(11.5, -5.7, 4.5, 0, 0, 0, 1); //p1-1
         readQrcode(0);
         //double valueX = Value;
 
@@ -50,10 +50,12 @@ public class YourService extends KiboRpcService {
         readQrcode(1);
         //double valueY = Value;
 
-        moveToWrapper(11, -5.5, 4.33, 0, 0.7071068, 0, 0.7071068);//p1-3
+        moveToWrapper(11, -5.5, 4.33, 0, -0.7071068, 0, 0.7071068);//p1-3
         readQrcode(2);
         //double valueZ = Value;
 
+        //
+        /*
         moveToWrapper(10.55, -5.5, 4.9, 0, 0, -0.7071068, 0.7071068);
         moveToWrapper(10.55, -6.8, 4.9, 0, 0, 0, 1);
         moveToWrapper(11.2, -6.8, 4.9, 0, 0, -0.7071068, 0.7071068);
@@ -73,7 +75,27 @@ public class YourService extends KiboRpcService {
 
         moveToWrapper(11.45, -8, 4.65, 0, 0, 0, 1);
         moveToWrapper(11.1, -8, 4.65, 0, 0, 0, 1);
-        moveToWrapper(11.1, -9, 4.65, 0, 0, 0, 1);
+        */
+        //
+
+        //裏技
+        //
+        String P2_1 = Double.toString(0);
+        String P2_3 = Double.toString(-0.7071068);
+        String P2_2 = Double.toString(0);
+        api.judgeSendDiscoveredQR(3,P2_1);
+        api.judgeSendDiscoveredQR(5,P2_3);
+        api.judgeSendDiscoveredQR(4,P2_2);
+
+        moveToWrapper(10.55, -5.5, 4.9, 0, 0, -0.7071068, 0.7071068);
+        moveToWrapper(10.55, -6.8, 4.9, 0, 0, 0, 1);
+        moveToWrapper(11.2, -6.8, 4.9, 0, 0, -0.7071068, 0.7071068);
+        moveToWrapper(11.2, -7.5, 4.9, 0, 0, 1, 0);
+
+        moveToWrapper(11.1, -8, 4.65, 0, 0, -0.7071068, 0.7071068);
+        //
+
+        moveToWrapper(11.1, -9, 4.65, 0, 0, 0, 0.7071068);
 
         /*
         moveToWrapper(valueX, valueY, valueZ, valueqX, valueqY, valueqZ,1); //p3
@@ -117,7 +139,6 @@ public class YourService extends KiboRpcService {
     }
 
     // QR code reading method
-
     private void readQrcode(int count) {
         Bitmap bitmap = api.getBitmapNavCam();
         // Bitmap のサイズを取得して、ピクセルデータを取得する
@@ -136,8 +157,8 @@ public class YourService extends KiboRpcService {
             // 解析結果を取得する
             String result = decodeResult.getText();
             Log.d("readQR", result);
-            api.judgeSendDiscoveredQR(count,result);
             //this.Value =  Double.parseDouble(result);
+            api.judgeSendDiscoveredQR(count,result);
 
         } catch (Exception e) {
             Log.d("readQR", e.getLocalizedMessage());
