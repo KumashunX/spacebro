@@ -5,6 +5,11 @@ package jp.jaxa.iss.kibo.rpc.spacebroapk;
 //import org.opencv.aruco.DetectorParameters;
 //import org.opencv.aruco.Dictionary;
 
+import gov.nasa.arc.astrobee.Result;
+import gov.nasa.arc.astrobee.types.Point;
+import gov.nasa.arc.astrobee.types.Quaternion;
+import jp.jaxa.iss.kibo.rpc.api.KiboRpcService;
+
 import android.graphics.Bitmap;
 import android.util.Log;
 
@@ -14,13 +19,10 @@ import com.google.zxing.RGBLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.QRCodeReader;
 
-import gov.nasa.arc.astrobee.Result;
-import gov.nasa.arc.astrobee.types.Point;
-import gov.nasa.arc.astrobee.types.Quaternion;
-import jp.jaxa.iss.kibo.rpc.api.KiboRpcService;
 
-import static java.lang.Math.PI;
-import static java.lang.Math.cos;
+
+//import static java.lang.Math.PI;
+//import static java.lang.Math.cos;
 
 //import java.util.ArrayList;
 //import java.util.List;
@@ -40,9 +42,11 @@ public class YourService extends KiboRpcService {
 
         api.judgeSendStart();
 
-        //moveToWrapper(11.5, -4.3, 4.5, 0, 0, -0.7071068, 0.7071068); //avoidKOZ1
+        moveToWrapper(11.5, -4.3, 4.5, 0, 0, -0.7071068, 0.7071068); //avoidKOZ1forP1-1
 
-        moveToWrapper(11.5, -5.7, 4.5, 0, 0, 0, 1); //p1-1
+        //moveToWrapper(11, -4.3, 5.4, 0, 0, -0.7071068, 0.7071068); //avoidKOZ1forP1-2
+
+        moveToWrapper(11.45, -5.7, 4.5, 0, 0, 0, 1); //p1-1
         readQrcode(0);
         //double valueX = Value;
 
@@ -80,12 +84,12 @@ public class YourService extends KiboRpcService {
 
         //裏技
         //
-        String P2_1 = Double.toString(0);
-        String P2_3 = Double.toString(-0.7071068);
-        String P2_2 = Double.toString(0);
-        api.judgeSendDiscoveredQR(3,P2_1);
-        api.judgeSendDiscoveredQR(5,P2_3);
-        api.judgeSendDiscoveredQR(4,P2_2);
+        String qrP2_1 = Double.toString(0);
+        String qrP2_3 = Double.toString(-0.7071068);
+        String qrP2_2 = Double.toString(0);
+        api.judgeSendDiscoveredQR(3,qrP2_1);
+        api.judgeSendDiscoveredQR(5,qrP2_3);
+        api.judgeSendDiscoveredQR(4,qrP2_2);
 
         moveToWrapper(10.55, -5.5, 4.9, 0, 0, -0.7071068, 0.7071068);
         moveToWrapper(10.55, -6.8, 4.9, 0, 0, 0, 1);
@@ -142,8 +146,10 @@ public class YourService extends KiboRpcService {
     private void readQrcode(int count) {
         Bitmap bitmap = api.getBitmapNavCam();
         // Bitmap のサイズを取得して、ピクセルデータを取得する
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
+        //int width = bitmap.getWidth();
+        int width = 1280;
+        //int height = bitmap.getHeight();
+        int height = 960;
         int[] pixels = new int[width * height];
         bitmap.getPixels(pixels, 0, width, 0, 0, width, height);
 
