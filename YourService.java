@@ -46,7 +46,7 @@ public class YourService extends KiboRpcService {
 
         //moveToWrapper(11, -4.3, 5.4, 0, 0, -0.7071068, 0.7071068); //avoidKOZ1forP1-2
 
-        moveToWrapper(11.45, -5.7, 4.5, 0, 0, 0, 1); //p1-1
+        moveToWrapper(11.4, -5.7, 4.5, 0, 0, 0, 1); //p1-1
 
         //api.judgeSendStart();
         readQrcode(0);
@@ -64,22 +64,23 @@ public class YourService extends KiboRpcService {
 
         moveToWrapper(10.45, -5.5, 4.9, 0, 0, -0.7071068, 0.7071068);//p1ゾーンの終わりから
         moveToWrapper(10.55, -6.8, 4.9, 0, 0, 0, 1);
-        moveToWrapper(11.2, -6.8, 4.9, 0, 0, -0.7071068, 0.7071068);
-        moveToWrapper(11.2, -7.5, 4.9, 0, 0, 1, 0);//p2ゾーンの入り口まで
+        moveToWrapper(11.5, -7.0, 4.9, 0, 0, -0.7071068, 0.7071068);
+        //moveToWrapper(11.2, -6.8, 4.9, 0, 0, -0.7071068, 0.7071068);
+        //moveToWrapper(11.2, -7.5, 4.9, 0, 0, 1, 0);//p2ゾーンの入り口まで
 
         moveToWrapper(10.35, -7.5, 4.7, 0, 0, 1, 0);//p2-1
         readQrcode(3);
         //double valueqX = Value;
 
-        moveToWrapper(11, -7.7, 5.55, 0, -0.7071068, 0, 0.7071068);//p2-3
-        readQrcode(5);
-        //double valueqZ = Value;
-
         moveToWrapper(11.45, -8, 5, 0, 0, 0, 1);//p2-2
         readQrcode(4);
         //double valueqY = Value;
 
-        moveToWrapper(11.1, -8, 4.65, 0, 0, -0.7071068, 0.7071068);//p2ゾーン終わり
+        moveToWrapper(11, -7.7, 5.55, 0, -0.7071068, 0, 0.7071068);//p2-3
+        readQrcode(5);
+        //double valueqZ = Value;
+
+        moveToWrapper(10.95, -8, 4.8, 0, 0, -0.7071068, 0.7071068);//p2ゾーン終わり
 
         //
 
@@ -108,7 +109,7 @@ public class YourService extends KiboRpcService {
         */
         //
 
-        moveToWrapper(11.1, -9, 4.65, 0, 0, 0, 0.7071068);
+        moveToWrapper(10.95, -9.3, 4.8, 0, 0, -0.7071068, 0.7071068);
 
         /*
         moveToWrapper(valueX, valueY, valueZ, valueqX, valueqY, valueqZ,1); //p3
