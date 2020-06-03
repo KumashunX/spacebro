@@ -54,7 +54,7 @@ public class YourService extends KiboRpcService {
         readQrcode(1);
         //double valueY = Value;
 
-        moveToWrapper(11, -5.5, 4.33, 0, -0.7071068, 0, 0.7071068);//p1-3
+        moveToWrapper(11, -5.5, 4.33, 0, 0.7071068, 0, 0.7071068);//p1-3
         readQrcode(2);
         //double valueZ = Value;
 
@@ -83,17 +83,23 @@ public class YourService extends KiboRpcService {
 
         //裏技
         //
-        String qrP2_1 = Double.toString(0);
-        String qrP2_3 = Double.toString(-0.7071068);
-        String qrP2_2 = Double.toString(0);
-        api.judgeSendDiscoveredQR(3,qrP2_1);
-        api.judgeSendDiscoveredQR(5,qrP2_3);
-        api.judgeSendDiscoveredQR(4,qrP2_2);
-
         moveToWrapper(10.55, -5.5, 4.9, 0, 0, -0.7071068, 0.7071068);//p1ゾーンの終わりから
         moveToWrapper(10.55, -6.8, 4.9, 0, 0, 0, 1);
         moveToWrapper(11.2, -6.8, 4.9, 0, 0, -0.7071068, 0.7071068);
         moveToWrapper(11.2, -7.5, 4.9, 0, 0, 1, 0);//p2ゾーンの入り口まで
+
+
+        moveToWrapper(10.35, -7.5, 4.7, 0, 0, 1, 0);//p2-1
+        String qrP2_1 = Double.toString(0);
+        api.judgeSendDiscoveredQR(3,qrP2_1);
+
+        moveToWrapper(11, -7.7, 5.55, 0, -0.7071068, 0, 0.7071068);//p2-3
+        String qrP2_3 = Double.toString(-0.7071068);
+        api.judgeSendDiscoveredQR(5,qrP2_3);
+
+        moveToWrapper(11.45, -8, 5, 0, 0, 0, 1);//p2-2
+        String qrP2_2 = Double.toString(0);
+        api.judgeSendDiscoveredQR(4,qrP2_2);
 
         moveToWrapper(11.1, -8, 4.65, 0, 0, -0.7071068, 0.7071068);//p2ゾーン終わり
         //
